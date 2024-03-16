@@ -31,8 +31,23 @@ export const getFiles = async (req, res, next) => {
   }
 };
 
-// export const deleteContact = (req, res) => {};
+export const getFileInfo = async (req, res, next) => {
+  const { fileName } = req.params;
+  try {
+    const result = await fs.readdir(folderPath);
+    const include = result.includes(fileName);
+    if (!include) {
+      throw HttpError(404, `File ${fileName} not found`);
+    }
 
-// export const createContact = (req, res) => {};
+    const filePath = path.resolve("./files", fileName);
+    const fileContent = await fs.readFile(filePath, "utf-8");
+    const extension = path.extname(filePath);
+    const file = path.basename(filePath, extension);
+    const { size } = await fs.stat(filePath);
 
-// export const updateContact = (req, res) => {};
+    res.json({ content: fileContent, name: file, extension, size });
+  } catch (error) {
+    next(error);
+  }
+};

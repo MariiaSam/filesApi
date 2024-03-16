@@ -2,7 +2,11 @@ import express from "express";
 import validateBody from "../helpers/validateBody.js";
 import { createFilesSchema } from "../schemas/filesSchema.js";
 
-import { createFile, getFiles } from "../controllers/filesControllers.js";
+import {
+  createFile,
+  getFiles,
+  getFileInfo,
+} from "../controllers/filesControllers.js";
 
 import { checkExtension } from "../middlewares/checkExtension.js";
 
@@ -16,6 +20,8 @@ filesRouter.post(
 );
 
 filesRouter.get("/", getFiles);
+
+filesRouter.get("/:fileName", getFileInfo);
 
 // contactsRouter.get("/:id", getOneContact);
 
